@@ -1,0 +1,22 @@
+#### on:
+ssh root@dokku1.esel.at
+
+dokku apps:create eselrw-lb
+
+dokku storage:ensure-directory eselrw-lb-data
+dokku storage:mount eselrw-lb /var/lib/dokku/data/storage/eselrw-lb-data:/data
+
+#### on macbook:
+
+git remote add dokku dokku@dokku1.esel.at:eselrw-lb
+git push dokku main
+
+dokku enter
+
+#### on:
+ssh root@dokku1.esel.at
+
+dokku letsencrypt:set eselrw-lb email manfred@mavu.io
+dokku letsencrypt:enable eselrw-lb
+
+dokku config:set eselrw-lb LIVEBOOK_PASSWORD=enzi.elefant
